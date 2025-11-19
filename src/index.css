@@ -4,50 +4,50 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Professional B2B SaaS Design System - ReadiNow Brand */
+/* Professional B2B SaaS Design System - Impero Brand */
 
 @layer base {
   :root {
-    /* Base colors - ReadiNow Brand Palette */
-    --background: 168 50% 96%;
-    --foreground: 217 33% 17%;
+    /* Base colors - Impero Brand Palette */
+    --background: 0 0% 97%;
+    --foreground: 180 25% 15%;
 
     /* Card surfaces */
     --card: 0 0% 100%;
-    --card-foreground: 180 40% 17%;
+    --card-foreground: 180 25% 15%;
 
     /* Popover surfaces */
     --popover: 0 0% 100%;
-    --popover-foreground: 180 40% 17%;
+    --popover-foreground: 180 25% 15%;
 
-    /* ReadiNow Primary Teal - #00CBA9 */
-    --primary: 170 100% 40%;
+    /* Impero Primary Green - #009736 */
+    --primary: 150 100% 30%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 170 100% 35%;
+    --primary-hover: 150 100% 25%;
 
-    /* ReadiNow Secondary Dark Teal - #1a3d3d */
-    --secondary: 180 40% 17%;
+    /* Impero Secondary Dark Slate Grey - #2F4F4F */
+    --secondary: 180 25% 25%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Warning Amber - #f59e0b */
-    --accent: 38 92% 50%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent Light Grey - #F0F0F0 */
+    --accent: 0 0% 94%;
+    --accent-foreground: 180 25% 15%;
 
     /* Muted backgrounds */
-    --muted: 168 40% 98%;
-    --muted-foreground: 217 20% 50%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 180 15% 45%;
 
     /* Destructive states */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     /* Borders and inputs */
-    --border: 170 30% 90%;
-    --input: 170 30% 90%;
-    --ring: 170 100% 40%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 150 100% 30%;
 
-    /* Radio button selected background - light teal #E0F7F5 */
-    --radio-selected: 170 65% 93%;
+    /* Radio button selected background - light green */
+    --radio-selected: 150 50% 90%;
 
     /* Border radius */
     --radius: 0.5rem;
@@ -70,37 +70,37 @@
   }
 
   .dark {
-    --background: 180 50% 12%;
+    --background: 180 25% 10%;
     --foreground: 0 0% 98%;
 
-    --card: 180 40% 15%;
+    --card: 180 25% 12%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 180 40% 15%;
+    --popover: 180 25% 12%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 170 100% 40%;
+    --primary: 150 100% 30%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 170 100% 35%;
+    --primary-hover: 150 100% 25%;
 
-    --secondary: 180 40% 20%;
+    --secondary: 180 25% 20%;
     --secondary-foreground: 0 0% 100%;
 
-    --accent: 38 92% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 0 0% 85%;
+    --accent-foreground: 180 25% 15%;
 
-    --muted: 180 30% 18%;
-    --muted-foreground: 217 20% 65%;
+    --muted: 180 25% 15%;
+    --muted-foreground: 0 0% 70%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 180 30% 25%;
-    --input: 180 30% 25%;
-    --ring: 170 100% 40%;
+    --border: 180 15% 25%;
+    --input: 180 15% 25%;
+    --ring: 150 100% 30%;
 
-    /* Radio button selected background - light teal for dark mode */
-    --radio-selected: 170 50% 25%;
+    /* Radio button selected background - dark green for dark mode */
+    --radio-selected: 150 40% 20%;
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;

@@ -79,10 +79,10 @@ const handler = async (req: Request): Promise<Response> => {
       maturityColor = "#f59e0b";
     } else if (percentage <= 80) {
       maturityLevel = "Managed - Strong Position, Minor Enhancements";
-      maturityColor = "#00CBA9";
+      maturityColor = "#009736";
     } else {
       maturityLevel = "Optimised - Provision 29 Ready";
-      maturityColor = "#00CBA9";
+      maturityColor = "#009736";
     }
 
     // Generate email HTML
@@ -94,12 +94,12 @@ const handler = async (req: Request): Promise<Response> => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Provision 29 Readiness Report</title>
 </head>
-<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; background-color: #f0faf8;">
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; background-color: #f5f5f5;">
   <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
     <!-- Header -->
-    <div style="background: linear-gradient(135deg, #00CBA9 0%, #1a3d3d 100%); padding: 40px 20px; text-align: center;">
+    <div style="background: linear-gradient(135deg, #009736 0%, #2F4F4F 100%); padding: 40px 20px; text-align: center;">
       <h1 style="color: #ffffff; margin: 0; font-size: 28px;">Your Provision 29 Readiness Report</h1>
-      <p style="color: #f0faf8; margin: 10px 0 0 0; font-size: 16px;">Powered by ReadiNow</p>
+      <p style="color: #F0F0F0; margin: 10px 0 0 0; font-size: 16px;">Powered by Impero - Compliance. Simplified.</p>
     </div>
 
     <!-- Company Info -->
@@ -122,8 +122,8 @@ const handler = async (req: Request): Promise<Response> => {
     </div>
 
     <!-- Overall Score -->
-    <div style="padding: 30px 20px; background-color: #f0faf8; text-align: center;">
-      <div style="font-size: 48px; font-weight: bold; color: #1a3d3d; margin: 0 0 10px 0;">${percentage}%</div>
+    <div style="padding: 30px 20px; background-color: #f5f5f5; text-align: center;">
+      <div style="font-size: 48px; font-weight: bold; color: #2F4F4F; margin: 0 0 10px 0;">${percentage}%</div>
       <div style="display: inline-block; padding: 8px 16px; background-color: ${maturityColor}; color: #ffffff; border-radius: 20px; font-size: 14px; font-weight: 600;">
         ${maturityLevel}
       </div>
@@ -146,11 +146,11 @@ const handler = async (req: Request): Promise<Response> => {
         return `
         <div style="margin-bottom: 20px;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-            <span style="color: #1e293b; font-size: 14px; font-weight: 600;">${sectionName}</span>
-            <span style="color: #00CBA9; font-size: 14px; font-weight: 600;">${sectionPercentage}%</span>
+            <span style="color: #2F4F4F; font-size: 14px; font-weight: 600;">${sectionName}</span>
+            <span style="color: #009736; font-size: 14px; font-weight: 600;">${sectionPercentage}%</span>
           </div>
           <div style="background-color: #e5e7eb; height: 8px; border-radius: 4px; overflow: hidden;">
-            <div style="background-color: #00CBA9; height: 100%; width: ${sectionPercentage}%;"></div>
+            <div style="background-color: #009736; height: 100%; width: ${sectionPercentage}%;"></div>
           </div>
         </div>
         `;
@@ -167,20 +167,20 @@ const handler = async (req: Request): Promise<Response> => {
     </div>
 
     <!-- CTA -->
-    <div style="padding: 40px 20px; text-align: center; background-color: #f0faf8;">
-      <h2 style="color: #1a3d3d; margin: 0 0 15px 0; font-size: 22px;">Ready to Close the Gaps?</h2>
+    <div style="padding: 40px 20px; text-align: center; background-color: #f5f5f5;">
+      <h2 style="color: #2F4F4F; margin: 0 0 15px 0; font-size: 22px;">Ready to Close the Gaps?</h2>
       <p style="color: #64748b; margin: 0 0 25px 0; font-size: 14px;">
-        Let ReadiNow help you achieve full Provision 29 compliance with our expert guidance and automated solutions.
+        Let Impero help you achieve full Provision 29 compliance with our COSO-based platform and expert guidance.
       </p>
-      <a href="https://www.readinow.com/home2025" style="display: inline-block; padding: 14px 32px; background-color: #00CBA9; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">
-        Learn About ReadiNow
+      <a href="https://impero.com" style="display: inline-block; padding: 14px 32px; background-color: #009736; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">
+        Learn About Impero
       </a>
     </div>
 
     <!-- Footer -->
     <div style="padding: 30px 20px; text-align: center; border-top: 1px solid #e5e7eb;">
       <p style="color: #94a3b8; margin: 0; font-size: 12px;">
-        © ${new Date().getFullYear()} ReadiNow. All rights reserved.
+        © ${new Date().getFullYear()} Impero - Compliance. Simplified. All rights reserved.
       </p>
       <p style="color: #94a3b8; margin: 10px 0 0 0; font-size: 12px;">
         This assessment report is for informational purposes only and does not constitute professional advice.
@@ -193,7 +193,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email via Resend
     const emailResponse = await resend.emails.send({
-      from: "ReadiNow Assessment <onboarding@resend.dev>",
+      from: "Impero Assessment <onboarding@resend.dev>",
       to: [email],
       subject: `Your Provision 29 Readiness Report - ${percentage}% Complete`,
       html: emailHtml,
