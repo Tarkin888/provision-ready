@@ -1,55 +1,55 @@
-import { Target, Building2, ShieldCheck } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { Target, Building2, Zap } from "lucide-react";
+
+const indicators = [
+  {
+    icon: Target,
+    title: "25% Efficiency Gain",
+    description: "Proven improvement through streamlined processes and timely control execution",
+  },
+  {
+    icon: Building2,
+    title: "Fortune 2000 Trusted",
+    description: "Serving large enterprises with multi-entity complexity including BAUHAUS and Sigma Financial",
+  },
+  {
+    icon: Zap,
+    title: "3+ Week Implementation",
+    description: "Fast deployment enabling rapid centralization of control frameworks",
+  },
+];
 
 const SocialProof = () => {
-  const indicators = [
-    {
-      icon: Target,
-      title: "10 Min Average",
-      description: "Completion Time",
-    },
-    {
-      icon: Building2,
-      title: "Based on 100+",
-      description: "FTSE Implementations",
-    },
-    {
-      icon: ShieldCheck,
-      title: "FRC Guidance",
-      description: "Aligned",
-    },
-  ];
-
   return (
-    <section className="py-16 bg-gradient-to-br from-primary/5 to-secondary/5 overflow-hidden">
+    <section className="py-12 lg:py-16 bg-gradient-to-br from-primary/5 to-secondary/5">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 animate-fade-in">
-          <h2 className="text-3xl font-bold text-secondary mb-4">
-            Trusted by FTSE Companies and Mid-Market Leaders
+        <div className="mx-auto max-w-3xl text-center mb-10">
+          <h2 className="text-2xl font-bold tracking-tight text-secondary lg:text-3xl mb-3">
+            Trust & Transparency Through Impero
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Our assessment methodology is battle-tested across the UK's leading
-            organisations and aligned with FRC guidance.
+          <p className="text-muted-foreground">
+            Making compliance manageable with immutable audit trails and standardised processes
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto pb-2">
+        
+        <div className="mx-auto max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-6">
           {indicators.map((indicator, index) => {
             const Icon = indicator.icon;
             return (
-              <Card
-                key={index}
-                className="p-6 text-center hover:shadow-lg transition-all animate-fade-in hover:-translate-y-1"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-                  <Icon className="w-8 h-8 text-primary" />
-                </div>
-                <h3 className="font-bold text-secondary mb-1">
-                  {indicator.title}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {indicator.description}
-                </p>
+              <Card key={index} className="border-border bg-card hover:border-primary/50 transition-all duration-300">
+                <CardContent className="pt-6">
+                  <div className="flex flex-col items-center text-center">
+                    <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                      <Icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-bold text-secondary mb-2">
+                      {indicator.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {indicator.description}
+                    </p>
+                  </div>
+                </CardContent>
               </Card>
             );
           })}

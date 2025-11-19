@@ -27,11 +27,11 @@ const Hero = () => {
           {/* Badges */}
           <div className="mb-6 flex flex-wrap items-center justify-center gap-3 animate-fade-in">
             <Badge variant="outline" className="border-primary/50 text-primary bg-primary/5 hover:bg-primary/10 transition-colors">
-              <Sparkles className="mr-1 h-3 w-3" />
-              AI-Powered Assessment
+              <ShieldCheck className="mr-1 h-3 w-3" />
+              COSO Framework Aligned
             </Badge>
             <Badge variant="outline" className="border-primary/50 text-primary bg-primary/5 hover:bg-primary/10 transition-colors">
-              Co-developed with ReadiNow
+              Powered by Impero
             </Badge>
           </div>
 
@@ -43,8 +43,8 @@ const Hero = () => {
 
           {/* Subheadline */}
           <p className="mb-6 text-lg text-foreground lg:text-xl animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            Assess your material controls framework in 10 minutes. Get instant
-            readiness score and gap analysis.
+            Assess your internal controls system in 10 minutes. Get instant
+            readiness score and COSO-aligned gap analysis.
           </p>
 
           {/* Urgency text */}
@@ -76,7 +76,7 @@ const Hero = () => {
 
           {/* Trust indicator */}
           <p className="mt-6 text-sm text-muted-foreground animate-fade-in" style={{ animationDelay: "0.6s" }}>
-            Trusted by FTSE Companies
+            Compliance. Simplified. | Trusted by Fortune 2000 Companies
           </p>
         </div>
         
