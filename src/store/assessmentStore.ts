@@ -106,7 +106,7 @@ export const useAssessmentStore = create<AssessmentState>()(
         }),
     }),
     {
-      name: 'readinow-assessment',
+      name: 'impero-assessment',
     }
   )
 );

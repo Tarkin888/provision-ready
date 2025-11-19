@@ -140,7 +140,7 @@ const Results = () => {
         description:
           "Implement enterprise risk management framework aligned to COSO/ISO 31000",
         solution:
-          "ReadiNow Solution: Enterprise Risk Management module with automated risk registers",
+          "Impero Solution: Enterprise Risk Management module with automated risk registers",
         timeline: "8-12 weeks",
       },
       "Material Controls Identification": {
@@ -149,7 +149,7 @@ const Results = () => {
         description:
           "Conduct material controls identification workshop with audit committee",
         solution:
-          "ReadiNow Solution: Internal Controls Monitoring module with materiality assessment tools",
+          "Impero Solution: Internal Controls Monitoring module with materiality assessment tools",
         timeline: "6-10 weeks",
       },
       "Monitoring & Testing": {
@@ -158,7 +158,7 @@ const Results = () => {
         description:
           "Design control testing schedule with automated evidence capture",
         solution:
-          "ReadiNow Solution: Audit Management module with continuous control monitoring",
+          "Impero Solution: Audit Management module with continuous control monitoring",
         timeline: "8-12 weeks",
       },
       "Board Oversight": {
@@ -166,7 +166,7 @@ const Results = () => {
         title: "Enhance Board Reporting",
         description: "Create board-level control effectiveness dashboard",
         solution:
-          "ReadiNow Solution: Corporate Governance module with real-time board portals",
+          "Impero Solution: Corporate Governance module with real-time board portals",
         timeline: "4-6 weeks",
       },
       "Audit Committee Engagement": {
@@ -175,7 +175,7 @@ const Results = () => {
         description:
           "Update Audit Committee terms of reference and provide Provision 29 training",
         solution:
-          "ReadiNow Solution: Governance module with audit committee workflow and training resources",
+          "Impero Solution: Governance module with audit committee workflow and training resources",
         timeline: "6-8 weeks",
       },
     };
@@ -404,7 +404,7 @@ const Results = () => {
                     <strong>Recommendation:</strong> {rec.description}
                   </p>
                   <p className="text-primary">
-                    <strong>ReadiNow Solution:</strong> {rec.solution}
+                    <strong>Impero Solution:</strong> {rec.solution}
                   </p>
                   <p className="text-muted-foreground">
                     <strong>Implementation Timeline:</strong> {rec.timeline}
@@ -591,10 +591,10 @@ const Results = () => {
             <Button 
               variant="outline" 
               className="gap-2"
-              onClick={() => window.open('https://www.readinow.com/home2025', '_blank')}
+              onClick={() => window.open('https://impero.com', '_blank')}
             >
               <ExternalLink className="w-4 h-4" />
-              Learn About ReadiNow
+              Learn About Impero
             </Button>
           </div>
         </Card>
