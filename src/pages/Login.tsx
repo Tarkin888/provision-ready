@@ -43,7 +43,7 @@ const Login = () => {
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <img src={logo} alt="ReadiNow" className="h-8" />
+            <img src={logo} alt="Impero" className="h-8" />
             <Button
               variant="ghost"
               onClick={() => navigate("/")}
