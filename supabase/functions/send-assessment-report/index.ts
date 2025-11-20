@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.81.1";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -10,20 +11,31 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-interface AssessmentReportRequest {
-  email: string;
-  companyProfile: {
-    companyName: string;
-    industrySector: string;
-    companySize: string;
-    grcMaturity: string;
-    email: string;
-    phone: string;
-  };
-  overallScore: number;
-  sectionScores: {
-    [key: number]: number;
-  };
+// Validation schema
+const assessmentSchema = z.object({
+  email: z.string().email().max(255),
+  companyProfile: z.object({
+    companyName: z.string().trim().min(1).max(200),
+    industrySector: z.string().trim().min(1).max(100),
+    companySize: z.string().trim().min(1).max(100),
+    grcMaturity: z.string().trim().min(1).max(100),
+    email: z.string().email().max(255),
+    phone: z.string().trim().max(50),
+  }),
+  overallScore: z.number().int().min(0).max(100),
+  sectionScores: z.record(z.number().int().min(0).max(20)),
+});
+
+type AssessmentReportRequest = z.infer<typeof assessmentSchema>;
+
+// HTML escape function to prevent XSS
+function escapeHtml(text: string | number): string {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -33,12 +45,16 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // Parse and validate input data
+    const requestData = await req.json();
+    const validatedData = assessmentSchema.parse(requestData);
+    
     const {
       email,
       companyProfile,
       overallScore,
       sectionScores,
-    }: AssessmentReportRequest = await req.json();
+    } = validatedData;
 
     console.log("Processing assessment report for:", email);
 
@@ -108,24 +124,24 @@ const handler = async (req: Request): Promise<Response> => {
       <table style="width: 100%; border-collapse: collapse;">
         <tr>
           <td style="padding: 8px 0; color: #64748b; font-size: 14px;">Company:</td>
-          <td style="padding: 8px 0; color: #1e293b; font-size: 14px; font-weight: 600;">${companyProfile.companyName}</td>
+          <td style="padding: 8px 0; color: #1e293b; font-size: 14px; font-weight: 600;">${escapeHtml(companyProfile.companyName)}</td>
         </tr>
         <tr>
           <td style="padding: 8px 0; color: #64748b; font-size: 14px;">Industry:</td>
-          <td style="padding: 8px 0; color: #1e293b; font-size: 14px;">${companyProfile.industrySector}</td>
+          <td style="padding: 8px 0; color: #1e293b; font-size: 14px;">${escapeHtml(companyProfile.industrySector)}</td>
         </tr>
         <tr>
           <td style="padding: 8px 0; color: #64748b; font-size: 14px;">Company Size:</td>
-          <td style="padding: 8px 0; color: #1e293b; font-size: 14px;">${companyProfile.companySize}</td>
+          <td style="padding: 8px 0; color: #1e293b; font-size: 14px;">${escapeHtml(companyProfile.companySize)}</td>
         </tr>
       </table>
     </div>
 
     <!-- Overall Score -->
     <div style="padding: 30px 20px; background-color: #f5f5f5; text-align: center;">
-      <div style="font-size: 48px; font-weight: bold; color: #2F4F4F; margin: 0 0 10px 0;">${percentage}%</div>
+      <div style="font-size: 48px; font-weight: bold; color: #2F4F4F; margin: 0 0 10px 0;">${escapeHtml(percentage)}%</div>
       <div style="display: inline-block; padding: 8px 16px; background-color: ${maturityColor}; color: #ffffff; border-radius: 20px; font-size: 14px; font-weight: 600;">
-        ${maturityLevel}
+        ${escapeHtml(maturityLevel)}
       </div>
     </div>
 
@@ -146,11 +162,11 @@ const handler = async (req: Request): Promise<Response> => {
         return `
         <div style="margin-bottom: 20px;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-            <span style="color: #2F4F4F; font-size: 14px; font-weight: 600;">${sectionName}</span>
-            <span style="color: #009736; font-size: 14px; font-weight: 600;">${sectionPercentage}%</span>
+            <span style="color: #2F4F4F; font-size: 14px; font-weight: 600;">${escapeHtml(sectionName)}</span>
+            <span style="color: #009736; font-size: 14px; font-weight: 600;">${escapeHtml(sectionPercentage)}%</span>
           </div>
           <div style="background-color: #e5e7eb; height: 8px; border-radius: 4px; overflow: hidden;">
-            <div style="background-color: #009736; height: 100%; width: ${sectionPercentage}%;"></div>
+            <div style="background-color: #009736; height: 100%; width: ${escapeHtml(sectionPercentage)}%;"></div>
           </div>
         </div>
         `;
