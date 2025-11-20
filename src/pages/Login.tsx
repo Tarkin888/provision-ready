@@ -5,8 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useAssessmentStore } from "@/store/assessmentStore";
-import { ArrowLeft } from "lucide-react";
-import logo from "@/assets/readinow-logo.png";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -43,7 +42,10 @@ const Login = () => {
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <img src={logo} alt="Impero" className="h-8" />
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="h-6 w-6 text-primary" />
+              <span className="text-xl font-bold text-secondary">Impero</span>
+            </div>
             <Button
               variant="ghost"
               onClick={() => navigate("/")}
