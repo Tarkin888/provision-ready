@@ -1,4 +1,26 @@
-# Welcome to your Lovable project
+# Provision 29 Readiness Assessment Tool
+
+## Powered by Impero - Compliance. Simplified.
+
+This is a comprehensive Provision 29 readiness assessment tool built on Impero's COSO-based internal controls platform. The tool helps UK premium-listed companies assess their preparedness for the January 2026 compliance deadline.
+
+### Key Features
+
+- **COSO Framework Alignment**: Built on the globally recognized COSO standard for rigorous internal controls
+- **Comprehensive Assessment**: Evaluates 5 critical domains across 25 questions
+- **Instant Gap Analysis**: Provides immediate readiness scoring and detailed recommendations
+- **Impero Platform Integration**: Showcases capabilities of Impero's Internal Controls System (ICS) Management platform
+- **Co-branded Solution**: Impero + Zia Rezvi partnership for Provision 29 compliance assurance
+
+### Platform Capabilities Demonstrated
+
+1. **Internal Controls System (ICS) Management** - Centralized, audit-ready control framework
+2. **Control Effectiveness Testing** - Immutable audit trails and bulk testing capabilities
+3. **COSO Framework Alignment** - Assertion-based control linking and rigorous foundation
+4. **Reporting & Audit Documentation** - Auto-generated audit-ready logs and board attestation support
+5. **Flexible Compliance Framework** - Support for SOX, ESG, IT, and general compliance
+
+---
 
 ## Project info
 

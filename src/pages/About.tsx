@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, FileText, Target, Shield } from "lucide-react";
+import { ArrowLeft, FileText, Target, Shield, ShieldCheck } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -123,6 +123,43 @@ const About = () => {
                       over 100 FTSE implementations. The results provide a
                       data-driven foundation for board discussions and strategic
                       planning around Provision 29 compliance.
+                    </p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-8 bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="p-3 rounded-lg bg-primary/10">
+                    <Shield className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-secondary mb-4">
+                      Powered by Impero: The Excel Killer
+                    </h2>
+                    <p className="text-muted-foreground leading-relaxed mb-4">
+                      This assessment is built on Impero's modern, cloud-based GRC platform—designed to replace manual, spreadsheet-based compliance processes with structured, audit-ready workflows. Unlike traditional approaches, Impero provides:
+                    </p>
+                    <ul className="space-y-3 text-muted-foreground mb-4">
+                      <li className="flex items-start gap-2">
+                        <ShieldCheck className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span><strong className="text-secondary">Immutable Audit Trail:</strong> Every action is logged with complete traceability, eliminating the risks of version control issues and manual errors inherent in Excel-based systems.</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <ShieldCheck className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span><strong className="text-secondary">COSO Framework Foundation:</strong> Built natively on the globally recognized COSO standard, ensuring your internal controls are structured on a rigorous, defensible foundation.</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <ShieldCheck className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span><strong className="text-secondary">Rapid Implementation:</strong> Deploy enterprise-wide internal controls management in as little as 3+ weeks, allowing large organizations to rapidly centralize their frameworks across multiple entities.</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <ShieldCheck className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span><strong className="text-secondary">Trust Through Transparency:</strong> Automated reporting and real-time dashboards provide boards and audit committees with continuous visibility into control effectiveness.</span>
+                      </li>
+                    </ul>
+                    <p className="text-muted-foreground leading-relaxed">
+                      Trusted by Fortune 2000 companies and OMX C25 organizations, Impero makes compliance simplified, delivering the confidence that comes from structured processes and automated documentation.
                     </p>
                   </div>
                 </div>

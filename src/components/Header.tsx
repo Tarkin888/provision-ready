@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import logo from "@/assets/readinow-logo.png";
+import { ShieldCheck } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const Header = () => {
@@ -23,8 +23,11 @@ const Header = () => {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold text-secondary">Impero</span>
+          <Link to="/" className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="h-6 w-6 text-primary" />
+              <span className="text-xl font-bold text-secondary">Impero</span>
+            </div>
             <span className="text-sm text-muted-foreground hidden sm:inline">+ Zia Rezvi</span>
           </Link>
           <div className="flex items-center gap-6">
