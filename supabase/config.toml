@@ -1,1 +1,4 @@
 project_id = "gsjtkfgjilacywjsgcvg"
+
+[functions.send-assessment-report]
+verify_jwt = false
