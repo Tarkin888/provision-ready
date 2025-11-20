@@ -23,6 +23,7 @@ export type Database = {
           id: string
           overall_score: number
           section_scores: Json
+          user_id: string | null
         }
         Insert: {
           company_name: string
@@ -32,6 +33,7 @@ export type Database = {
           id?: string
           overall_score: number
           section_scores: Json
+          user_id?: string | null
         }
         Update: {
           company_name?: string
@@ -41,6 +43,7 @@ export type Database = {
           id?: string
           overall_score?: number
           section_scores?: Json
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -53,6 +56,7 @@ export type Database = {
           message: string | null
           name: string
           phone: string | null
+          user_id: string | null
         }
         Insert: {
           company: string
@@ -62,6 +66,7 @@ export type Database = {
           message?: string | null
           name: string
           phone?: string | null
+          user_id?: string | null
         }
         Update: {
           company?: string
@@ -71,6 +76,7 @@ export type Database = {
           message?: string | null
           name?: string
           phone?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }

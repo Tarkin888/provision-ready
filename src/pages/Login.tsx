@@ -35,7 +35,7 @@ const Login = () => {
           title: "Login Successful",
           description: "Welcome back! Redirecting to dashboard...",
         });
-        navigate("/admin");
+        navigate("/dashboard");
       }
     } catch (error) {
       toast({
@@ -76,10 +76,10 @@ const Login = () => {
           <div className="bg-card border border-border rounded-lg shadow-lg p-8">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-secondary mb-2">
-                Admin Login
+                Welcome Back
               </h1>
               <p className="text-muted-foreground">
-                Access your dashboard to view submissions
+                Sign in to access your assessment dashboard
               </p>
             </div>
 
@@ -89,7 +89,7 @@ const Login = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@impero.com"
+                  placeholder="your.email@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -121,11 +121,11 @@ const Login = () => {
 
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground mb-4">
-                Don't have an admin account?
+                Don't have an account?
               </p>
               <Link to="/signup">
                 <Button variant="outline" className="w-full">
-                  Create Admin Account
+                  Create Account
                 </Button>
               </Link>
             </div>
