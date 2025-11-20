@@ -43,7 +43,7 @@ const Signup = () => {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/admin`,
+          emailRedirectTo: `${window.location.origin}/dashboard`,
         },
       });
 
@@ -99,10 +99,10 @@ const Signup = () => {
           <div className="bg-card border border-border rounded-lg shadow-lg p-8">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-secondary mb-2">
-                Create Admin Account
+                Create Your Account
               </h1>
               <p className="text-muted-foreground">
-                Set up your administrator credentials
+                Get started with Impero's Provision 29 Assessment
               </p>
             </div>
 
@@ -112,7 +112,7 @@ const Signup = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@impero.com"
+                  placeholder="your.email@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required

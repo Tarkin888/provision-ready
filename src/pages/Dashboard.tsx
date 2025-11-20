@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ShieldCheck, LogOut, Loader2 } from "lucide-react";
 
-const Admin = () => {
+const Dashboard = () => {
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ const Admin = () => {
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold text-secondary">Impero Admin</span>
+              <span className="text-xl font-bold text-secondary">Impero Dashboard</span>
             </div>
             <Button
               variant="ghost"
@@ -80,7 +80,7 @@ const Admin = () => {
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold text-secondary mb-4">
-            Welcome to Admin Dashboard
+            Your Assessment Dashboard
           </h1>
           <p className="text-muted-foreground mb-8">
             Logged in as: <span className="font-semibold">{user?.email}</span>
@@ -88,16 +88,16 @@ const Admin = () => {
 
           <div className="bg-card border border-border rounded-lg p-6">
             <h2 className="text-2xl font-bold text-secondary mb-4">
-              Dashboard Features Coming Soon
+              Your Assessments
             </h2>
             <p className="text-muted-foreground">
-              This admin dashboard will provide access to:
+              View and manage your Provision 29 compliance assessments:
             </p>
             <ul className="list-disc list-inside mt-4 space-y-2 text-muted-foreground">
-              <li>View all assessment reports</li>
-              <li>Manage consultation requests</li>
-              <li>Export data and analytics</li>
-              <li>User management</li>
+              <li>View your completed assessment reports</li>
+              <li>Track your compliance scores over time</li>
+              <li>Review consultation requests</li>
+              <li>Download assessment documentation</li>
             </ul>
           </div>
         </div>
@@ -106,4 +106,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default Dashboard;
