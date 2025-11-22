@@ -78,8 +78,8 @@ const AssessmentSection = ({
       // Save to store (zustand persist middleware will handle localStorage)
       setSectionAnswer(section.id, questionId, answer, score);
       
-      // Wait briefly to ensure persistence completes (reduced from 150ms to 50ms)
-      await new Promise(resolve => setTimeout(resolve, 50));
+      // Wait briefly to ensure persistence completes
+      await new Promise(resolve => setTimeout(resolve, 30));
       
       // Verify save completed by checking store
       const storedAnswer = useAssessmentStore.getState().sections[section.id]?.find(
@@ -87,14 +87,14 @@ const AssessmentSection = ({
       );
       
       if (storedAnswer && storedAnswer.answer === answer && storedAnswer.score === score) {
-        // Success - show saved state
+        // Success - show saved state (transition within 1 second total)
         setSavingStates((prev) => ({ ...prev, [questionId]: 'saved' }));
         useAssessmentStore.getState().setSaveStatus('saved');
         
-        // Clear saved indicator after 1.5 seconds (reduced from 2s)
+        // Clear saved indicator after 1 second with fade
         setTimeout(() => {
           setSavingStates((prev) => ({ ...prev, [questionId]: 'idle' }));
-        }, 1500);
+        }, 1000);
       } else {
         throw new Error('Save verification failed');
       }
@@ -370,17 +370,17 @@ const AssessmentSection = ({
                       </span>
                     </Label>
                     
-                    {/* Save status indicator - only show for selected option */}
+                    {/* Save status indicator - positioned far right, 16px size */}
                     {isSelected && (
-                      <div className="ml-auto flex-shrink-0 flex items-center">
+                      <div className="ml-auto pl-4 flex-shrink-0 flex items-center justify-end min-w-[24px]">
                         {saveState === 'saving' && (
-                          <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                          <Loader2 className="w-4 h-4 animate-spin text-primary" />
                         )}
                         {saveState === 'saved' && (
-                          <CheckCircle2 className="h-4 w-4 text-primary animate-in fade-in duration-200" />
+                          <CheckCircle2 className="w-4 h-4 text-primary animate-in fade-in zoom-in-50 duration-300" />
                         )}
                         {saveState === 'idle' && isSelected && (
-                          <div className="h-4 w-4" />
+                          <div className="w-4 h-4 opacity-0 transition-opacity duration-300" />
                         )}
                         {saveState === 'error' && (
                           <button
@@ -388,7 +388,7 @@ const AssessmentSection = ({
                             className="flex items-center gap-1 text-destructive hover:text-destructive/80 transition-colors"
                             title="Click to retry"
                           >
-                            <AlertCircle className="h-4 w-4" />
+                            <AlertCircle className="w-4 h-4" />
                             <span className="text-xs">Retry</span>
                           </button>
                         )}
