@@ -471,17 +471,17 @@ const AssessmentSection = ({
           </TooltipProvider>
           
           {nextButtonState === 'saving' && (
-            <p className="text-sm text-muted-foreground animate-fade-in">
-              Saving your answers...
+            <p className="text-sm text-gray-600 mt-2 animate-fade-in">
+              Saving your answers<span className="animate-pulse">...</span>
             </p>
           )}
           {nextButtonState === 'verifying' && (
-            <p className="text-sm text-muted-foreground animate-fade-in">
+            <p className="text-sm text-gray-600 mt-2 animate-fade-in">
               Verifying all answers are saved...
             </p>
           )}
           {nextButtonState === 'slow' && (
-            <p className="text-sm text-amber-600 animate-fade-in">
+            <p className="text-sm text-amber-600 mt-2 animate-fade-in">
               This is taking longer than expected...
             </p>
           )}
