@@ -55,7 +55,9 @@ const AssessmentSection = ({
     setShowScore(savedAnswers.length === section.questions.length);
   }, [section.id, sections, section.questions.length]);
 
-  const handleAnswerChange = useCallback(async (questionId: number, answer: string, score: number) => {
+  const handleAnswerChange = useCallback(async (questionId: number, answer: string, score: number, retryCount = 0) => {
+    const MAX_RETRIES = 3;
+    
     try {
       // Show autosave notification on first answer
       if (!hasShownAutosaveToast) {
@@ -68,6 +70,7 @@ const AssessmentSection = ({
       // Set saving state immediately
       setSavingStates((prev) => ({ ...prev, [questionId]: 'saving' }));
       setIsSaving(true);
+      useAssessmentStore.getState().setSaveStatus('saving');
       
       // Update local state
       setAnswers((prev) => ({ ...prev, [questionId]: answer }));
@@ -86,6 +89,7 @@ const AssessmentSection = ({
       if (storedAnswer && storedAnswer.answer === answer && storedAnswer.score === score) {
         // Success - show saved state
         setSavingStates((prev) => ({ ...prev, [questionId]: 'saved' }));
+        useAssessmentStore.getState().setSaveStatus('saved');
         
         // Clear saved indicator after 1.5 seconds (reduced from 2s)
         setTimeout(() => {
@@ -96,8 +100,26 @@ const AssessmentSection = ({
       }
     } catch (error) {
       console.error('Failed to save answer:', error);
-      setSavingStates((prev) => ({ ...prev, [questionId]: 'error' }));
-      toast.error('Failed to save answer. Please try again.');
+      
+      // Retry logic
+      if (retryCount < MAX_RETRIES) {
+        console.log(`Retrying save (attempt ${retryCount + 1}/${MAX_RETRIES})...`);
+        setSavingStates((prev) => ({ ...prev, [questionId]: 'saving' }));
+        useAssessmentStore.getState().setSaveStatus('error');
+        
+        // Wait before retry with exponential backoff
+        await new Promise(resolve => setTimeout(resolve, 500 * (retryCount + 1)));
+        
+        // Retry the save
+        return handleAnswerChange(questionId, answer, score, retryCount + 1);
+      } else {
+        // All retries failed
+        setSavingStates((prev) => ({ ...prev, [questionId]: 'error' }));
+        useAssessmentStore.getState().setSaveStatus('error');
+        toast.error('Unable to save - Check your connection', {
+          description: 'Your answer will be saved when connection is restored'
+        });
+      }
     } finally {
       setIsSaving(false);
     }
