@@ -16,15 +16,20 @@ export interface SectionAnswer {
   score: number;
 }
 
+export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
+
 export interface AssessmentState {
   currentStep: number;
   companyProfile: CompanyProfile | null;
   sections: {
     [key: number]: SectionAnswer[];
   };
+  lastSaveTime: number | null;
+  saveStatus: SaveStatus;
   setCurrentStep: (step: number) => void;
   setCompanyProfile: (profile: CompanyProfile) => void;
   setSectionAnswer: (sectionId: number, questionId: number, answer: string, score: number) => void;
+  setSaveStatus: (status: SaveStatus) => void;
   getSectionProgress: (sectionId: number) => number;
   getSectionScore: (sectionId: number) => number;
   getTotalScore: () => number;
@@ -41,6 +46,8 @@ export const useAssessmentStore = create<AssessmentState>()(
       currentStep: 0,
       companyProfile: null,
       sections: {},
+      lastSaveTime: null,
+      saveStatus: 'idle',
 
       setCurrentStep: (step) => set({ currentStep: step }),
 
@@ -65,8 +72,12 @@ export const useAssessmentStore = create<AssessmentState>()(
               ...state.sections,
               [sectionId]: updatedAnswers,
             },
+            lastSaveTime: Date.now(),
+            saveStatus: 'saved',
           };
         }),
+
+      setSaveStatus: (status) => set({ saveStatus: status }),
 
       getSectionProgress: (sectionId) => {
         const answers = get().sections[sectionId] || [];
@@ -103,6 +114,8 @@ export const useAssessmentStore = create<AssessmentState>()(
           currentStep: 0,
           companyProfile: null,
           sections: {},
+          lastSaveTime: null,
+          saveStatus: 'idle',
         }),
     }),
     {

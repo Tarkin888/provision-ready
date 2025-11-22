@@ -1,5 +1,13 @@
 import { useAssessmentStore } from "@/store/assessmentStore";
-import { CheckCircle2, Circle } from "lucide-react";
+import { CheckCircle2, Circle, Cloud, CloudOff, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { formatDistanceToNow } from "date-fns";
 
 interface ProgressTrackerProps {
   sections: Array<{
@@ -9,9 +17,28 @@ interface ProgressTrackerProps {
 }
 
 const ProgressTracker = ({ sections }: ProgressTrackerProps) => {
-  const { currentStep, getSectionProgress, getOverallProgress } =
+  const { currentStep, getSectionProgress, getOverallProgress, lastSaveTime, saveStatus } =
     useAssessmentStore();
   const overallProgress = getOverallProgress();
+  const [displayStatus, setDisplayStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+
+  useEffect(() => {
+    if (saveStatus === 'saving') {
+      setDisplayStatus('saving');
+    } else if (saveStatus === 'saved') {
+      setDisplayStatus('saved');
+      // Fade to idle after 2 seconds
+      const timer = setTimeout(() => setDisplayStatus('idle'), 2000);
+      return () => clearTimeout(timer);
+    } else if (saveStatus === 'error') {
+      setDisplayStatus('error');
+    }
+  }, [saveStatus]);
+
+  const getTimeAgo = () => {
+    if (!lastSaveTime) return 'Never';
+    return formatDistanceToNow(new Date(lastSaveTime), { addSuffix: true });
+  };
 
   return (
     <div className="bg-white rounded-xl border border-border p-8 shadow-sm">
@@ -20,9 +47,48 @@ const ProgressTracker = ({ sections }: ProgressTrackerProps) => {
           <h3 className="text-base font-medium text-secondary">
             Overall Progress
           </h3>
-          <span className="text-lg font-bold text-primary">
-            {overallProgress}%
-          </span>
+          <div className="flex items-center gap-4">
+            <span className="text-lg font-bold text-primary">
+              {overallProgress}%
+            </span>
+            
+            {/* Auto-save indicator */}
+            <TooltipProvider>
+              <Tooltip delayDuration={300}>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-1.5 text-sm">
+                    {displayStatus === 'saving' && (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                        <span className="text-muted-foreground">Saving...</span>
+                      </>
+                    )}
+                    {displayStatus === 'saved' && (
+                      <>
+                        <Cloud className="h-4 w-4 text-primary" />
+                        <span className="text-primary font-medium">Saved ✓</span>
+                      </>
+                    )}
+                    {displayStatus === 'idle' && lastSaveTime && (
+                      <>
+                        <Cloud className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-muted-foreground">Auto-saved</span>
+                      </>
+                    )}
+                    {displayStatus === 'error' && (
+                      <>
+                        <CloudOff className="h-4 w-4 text-amber-600" />
+                        <span className="text-amber-600 font-medium">Retrying...</span>
+                      </>
+                    )}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Last saved: {getTimeAgo()}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
         <div className="h-3 bg-secondary/10 rounded-full overflow-hidden">
           <div
