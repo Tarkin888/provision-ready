@@ -36,6 +36,8 @@ const AssessmentSection = ({
   const [savingStates, setSavingStates] = useState<{ [key: number]: SaveState }>({});
   const [isSaving, setIsSaving] = useState(false);
   const [hasShownAutosaveToast, setHasShownAutosaveToast] = useState(false);
+  const [nextButtonState, setNextButtonState] = useState<'idle' | 'saving' | 'verifying' | 'slow'>('idle');
+  const [verificationStartTime, setVerificationStartTime] = useState<number | null>(null);
 
   useEffect(() => {
     const savedAnswers = sections[section.id] || [];
@@ -67,8 +69,8 @@ const AssessmentSection = ({
       // Save to store (zustand persist middleware will handle localStorage)
       setSectionAnswer(section.id, questionId, answer, score);
       
-      // Wait a brief moment to ensure persistence completes
-      await new Promise(resolve => setTimeout(resolve, 150));
+      // Wait briefly to ensure persistence completes (reduced from 150ms to 50ms)
+      await new Promise(resolve => setTimeout(resolve, 50));
       
       // Verify save completed by checking store
       const storedAnswer = useAssessmentStore.getState().sections[section.id]?.find(
@@ -79,10 +81,10 @@ const AssessmentSection = ({
         // Success - show saved state
         setSavingStates((prev) => ({ ...prev, [questionId]: 'saved' }));
         
-        // Clear saved indicator after 2 seconds
+        // Clear saved indicator after 1.5 seconds (reduced from 2s)
         setTimeout(() => {
           setSavingStates((prev) => ({ ...prev, [questionId]: 'idle' }));
-        }, 2000);
+        }, 1500);
       } else {
         throw new Error('Save verification failed');
       }
@@ -99,43 +101,74 @@ const AssessmentSection = ({
     setCurrentStep(sectionNumber - 1);
   };
 
-  const handleNext = () => {
-    // Check if any saves are in progress
-    const anySaving = Object.values(savingStates).some(state => state === 'saving');
-    if (anySaving) {
-      toast.error("Please wait for all answers to finish saving");
-      return;
-    }
-    
-    // Check if any saves failed
-    const anyErrors = Object.values(savingStates).some(state => state === 'error');
-    if (anyErrors) {
-      toast.error("Some answers failed to save. Please retry failed answers.");
-      return;
-    }
-    
-    const answeredQuestions = Object.keys(answers).length;
-    if (answeredQuestions < section.questions.length) {
-      toast.error("Please answer all questions before proceeding");
-      return;
-    }
-    
-    // Validate that all answers are actually saved in store
-    const savedAnswers = sections[section.id] || [];
-    if (savedAnswers.length !== section.questions.length) {
-      toast.error("Not all answers have been saved. Please review your answers.");
-      return;
-    }
-    
-    setShowScore(true);
-    toast.success("Section complete! All answers saved.");
-    setTimeout(() => {
-      if (sectionNumber === totalSections) {
-        window.location.href = "/results";
-      } else {
-        setCurrentStep(sectionNumber + 1);
+  const handleNext = async () => {
+    try {
+      setNextButtonState('saving');
+      setVerificationStartTime(Date.now());
+      
+      // Set up slow warning timer
+      const slowWarningTimer = setTimeout(() => {
+        if (nextButtonState !== 'idle') {
+          setNextButtonState('slow');
+        }
+      }, 3000);
+      
+      // Check if any saves are in progress
+      const anySaving = Object.values(savingStates).some(state => state === 'saving');
+      if (anySaving) {
+        clearTimeout(slowWarningTimer);
+        setNextButtonState('idle');
+        toast.error("Please wait for all answers to finish saving");
+        return;
       }
-    }, 1500);
+      
+      // Check if any saves failed
+      const anyErrors = Object.values(savingStates).some(state => state === 'error');
+      if (anyErrors) {
+        clearTimeout(slowWarningTimer);
+        setNextButtonState('idle');
+        toast.error("Some answers failed to save. Please retry failed answers.");
+        return;
+      }
+      
+      const answeredQuestions = Object.keys(answers).length;
+      if (answeredQuestions < section.questions.length) {
+        clearTimeout(slowWarningTimer);
+        setNextButtonState('idle');
+        toast.error("Please answer all questions before proceeding");
+        return;
+      }
+      
+      // Quick verification phase
+      setNextButtonState('verifying');
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Validate that all answers are actually saved in store
+      const savedAnswers = sections[section.id] || [];
+      if (savedAnswers.length !== section.questions.length) {
+        clearTimeout(slowWarningTimer);
+        setNextButtonState('idle');
+        toast.error("Not all answers have been saved. Please review your answers.");
+        return;
+      }
+      
+      clearTimeout(slowWarningTimer);
+      setShowScore(true);
+      setNextButtonState('idle');
+      toast.success("Section complete! All answers saved.");
+      
+      // Reduced navigation delay from 1500ms to 800ms
+      setTimeout(() => {
+        if (sectionNumber === totalSections) {
+          window.location.href = "/results";
+        } else {
+          setCurrentStep(sectionNumber + 1);
+        }
+      }, 800);
+    } catch (error) {
+      setNextButtonState('idle');
+      toast.error("An error occurred. Please try again.");
+    }
   };
 
   const handleSave = () => {
@@ -336,24 +369,47 @@ const AssessmentSection = ({
           Save & Resume Later
         </Button>
 
-        <Button
-          onClick={handleNext}
-          disabled={!canNavigate}
-          className="gap-2 bg-primary hover:bg-primary/90 text-white transition-all duration-200 hover:scale-105 disabled:hover:scale-100"
-          aria-label={sectionNumber === totalSections ? "View assessment results" : "Go to next section"}
-        >
-          {anySaving ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Saving...
-            </>
-          ) : (
-            <>
-              {sectionNumber === totalSections ? "View Results" : "Next"}
-              <ArrowRight className="w-4 h-4" />
-            </>
+        <div className="flex flex-col items-end gap-2">
+          <Button
+            onClick={handleNext}
+            disabled={!canNavigate || nextButtonState !== 'idle'}
+            className="gap-2 bg-primary hover:bg-primary/90 text-white transition-all duration-200 hover:scale-105 disabled:hover:scale-100"
+            aria-label={sectionNumber === totalSections ? "View assessment results" : "Go to next section"}
+          >
+            {nextButtonState === 'saving' || nextButtonState === 'verifying' || nextButtonState === 'slow' ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                {sectionNumber === totalSections ? "Processing" : "Next"}
+              </>
+            ) : anySaving ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                {sectionNumber === totalSections ? "View Results" : "Next"}
+                <ArrowRight className="w-4 h-4" />
+              </>
+            )}
+          </Button>
+          
+          {nextButtonState === 'saving' && (
+            <p className="text-sm text-muted-foreground animate-fade-in">
+              Saving your answers...
+            </p>
           )}
-        </Button>
+          {nextButtonState === 'verifying' && (
+            <p className="text-sm text-muted-foreground animate-fade-in">
+              Verifying all answers are saved...
+            </p>
+          )}
+          {nextButtonState === 'slow' && (
+            <p className="text-sm text-amber-600 animate-fade-in">
+              This is taking longer than expected...
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );
