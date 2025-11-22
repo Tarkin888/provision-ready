@@ -2,6 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useAssessmentStore } from "@/store/assessmentStore";
 import { ArrowLeft, ArrowRight, Save, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
@@ -179,6 +185,22 @@ const AssessmentSection = ({
     });
   };
 
+  const handleDisabledButtonClick = () => {
+    if (!isComplete) {
+      toast.warning("Please answer all questions in this section before continuing", {
+        duration: 3000,
+      });
+    } else if (anySaving) {
+      toast.warning("Please wait for all answers to finish saving", {
+        duration: 3000,
+      });
+    } else if (anyErrors) {
+      toast.warning("Some answers failed to save. Please retry failed answers.", {
+        duration: 3000,
+      });
+    }
+  };
+
   const answeredCount = Object.keys(answers).length;
   const isComplete = answeredCount === section.questions.length;
   const sectionScore = getSectionScore(section.id);
@@ -199,9 +221,11 @@ const AssessmentSection = ({
         <h2 className="text-2xl font-bold text-secondary mb-2">
           {section.title}
         </h2>
-        <p className="text-muted-foreground">
-          {answeredCount}/{section.questions.length} questions completed
-        </p>
+        <div className={`text-sm font-medium mb-1 transition-colors ${
+          isComplete ? 'text-green-600' : 'text-muted-foreground'
+        }`}>
+          Questions: {answeredCount}/{section.questions.length} answered
+        </div>
         {isSaving && (
           <div className="flex items-center gap-2 text-sm text-primary mt-2">
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -272,14 +296,22 @@ const AssessmentSection = ({
       )}
 
       <div className="space-y-8 mb-8">
-        {section.questions.map((question) => (
-          <div
-            key={question.id}
-            className="pb-6 border-b border-border last:border-0"
-          >
-            <Label className="text-base font-medium text-foreground mb-4 block">
-              {question.id + 1}. {question.text}
-            </Label>
+        {section.questions.map((question) => {
+          const isAnswered = answers[question.id] !== undefined;
+          
+          return (
+            <div
+              key={question.id}
+              className="pb-6 border-b border-border last:border-0"
+            >
+              <div className="flex items-start gap-2 mb-4">
+                {!isAnswered && (
+                  <span className="flex-shrink-0 w-2 h-2 bg-amber-500 rounded-full animate-pulse mt-2" />
+                )}
+                <Label className="text-base font-medium text-foreground">
+                  {question.id + 1}. {question.text}
+                </Label>
+              </div>
             <RadioGroup
               value={answers[question.id] || ""}
               onValueChange={(value) => {
@@ -344,8 +376,9 @@ const AssessmentSection = ({
                 );
               })}
             </RadioGroup>
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
 
       <div className="flex items-center justify-between pt-6 border-t border-border">
@@ -370,29 +403,50 @@ const AssessmentSection = ({
         </Button>
 
         <div className="flex flex-col items-end gap-2">
-          <Button
-            onClick={handleNext}
-            disabled={!canNavigate || nextButtonState !== 'idle'}
-            className="gap-2 bg-primary hover:bg-primary/90 text-white transition-all duration-200 hover:scale-105 disabled:hover:scale-100"
-            aria-label={sectionNumber === totalSections ? "View assessment results" : "Go to next section"}
-          >
-            {nextButtonState === 'saving' || nextButtonState === 'verifying' || nextButtonState === 'slow' ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                {sectionNumber === totalSections ? "Processing" : "Next"}
-              </>
-            ) : anySaving ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                {sectionNumber === totalSections ? "View Results" : "Next"}
-                <ArrowRight className="w-4 h-4" />
-              </>
-            )}
-          </Button>
+          <TooltipProvider>
+            <Tooltip delayDuration={300}>
+              <TooltipTrigger asChild>
+                <div onClick={!canNavigate || nextButtonState !== 'idle' ? handleDisabledButtonClick : undefined}>
+                  <Button
+                    onClick={handleNext}
+                    disabled={!canNavigate || nextButtonState !== 'idle'}
+                    className="gap-2 bg-primary hover:bg-primary/90 text-white transition-all duration-200 hover:scale-105 disabled:hover:scale-100"
+                    aria-label={sectionNumber === totalSections ? "View assessment results" : "Go to next section"}
+                  >
+                    {nextButtonState === 'saving' || nextButtonState === 'verifying' || nextButtonState === 'slow' ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        {sectionNumber === totalSections ? "Processing" : "Next"}
+                      </>
+                    ) : anySaving ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        {sectionNumber === totalSections ? "View Results" : "Next"}
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </TooltipTrigger>
+              {(!canNavigate || nextButtonState !== 'idle') && (
+                <TooltipContent side="left" className="animate-in fade-in duration-200">
+                  <p>
+                    {!isComplete
+                      ? `Complete all ${section.questions.length} questions to continue`
+                      : anySaving
+                      ? "Waiting for answers to save..."
+                      : anyErrors
+                      ? "Please retry failed answers"
+                      : "Processing..."}
+                  </p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </TooltipProvider>
           
           {nextButtonState === 'saving' && (
             <p className="text-sm text-muted-foreground animate-fade-in">
