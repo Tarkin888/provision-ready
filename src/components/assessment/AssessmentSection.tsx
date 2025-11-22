@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useAssessmentStore } from "@/store/assessmentStore";
-import { ArrowLeft, ArrowRight, Save, Loader2, Check, AlertCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, Save, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 
 type SaveState = 'idle' | 'saving' | 'saved' | 'error';
@@ -285,17 +285,20 @@ const AssessmentSection = ({
                     
                     {/* Save status indicator - only show for selected option */}
                     {isSelected && (
-                      <div className="ml-auto flex-shrink-0">
+                      <div className="ml-auto flex-shrink-0 flex items-center">
                         {saveState === 'saving' && (
-                          <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                          <Loader2 className="h-4 w-4 animate-spin text-primary" />
                         )}
                         {saveState === 'saved' && (
-                          <Check className="h-4 w-4 text-green-500 animate-in fade-in duration-200" />
+                          <CheckCircle2 className="h-4 w-4 text-primary animate-in fade-in duration-200" />
+                        )}
+                        {saveState === 'idle' && isSelected && (
+                          <div className="h-4 w-4" />
                         )}
                         {saveState === 'error' && (
                           <button
                             onClick={() => handleAnswerChange(question.id, option.label, option.score)}
-                            className="flex items-center gap-1 text-red-500 hover:text-red-600"
+                            className="flex items-center gap-1 text-destructive hover:text-destructive/80 transition-colors"
                             title="Click to retry"
                           >
                             <AlertCircle className="h-4 w-4" />
