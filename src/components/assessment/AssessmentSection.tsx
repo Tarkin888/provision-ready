@@ -209,7 +209,7 @@ const AssessmentSection = ({
 
   const handleDisabledButtonClick = () => {
     if (!isComplete) {
-      toast.warning("Please answer all questions in this section before continuing", {
+      toast.warning(`Please answer all ${section.questions.length} questions before continuing`, {
         duration: 3000,
       });
     } else if (anySaving) {
@@ -244,7 +244,7 @@ const AssessmentSection = ({
           {section.title}
         </h2>
         <div className={`text-sm font-medium mb-1 transition-colors ${
-          isComplete ? 'text-green-600' : 'text-muted-foreground'
+          isComplete ? 'text-green-600' : 'text-gray-600'
         }`}>
           Questions: {answeredCount}/{section.questions.length} answered
         </div>
@@ -454,11 +454,11 @@ const AssessmentSection = ({
                   </Button>
                 </div>
               </TooltipTrigger>
-              {(!canNavigate || nextButtonState !== 'idle') && (
+              {!canNavigate && (
                 <TooltipContent side="left" className="animate-in fade-in duration-200">
                   <p>
                     {!isComplete
-                      ? `Complete all ${section.questions.length} questions to continue`
+                      ? "Complete all questions to continue"
                       : anySaving
                       ? "Waiting for answers to save..."
                       : anyErrors
